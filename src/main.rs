@@ -22,13 +22,13 @@ fn write_with_convert(graph_end: &mut bool, b: u8) {
     }
 
     if b == '|' as u8 {
-        print!("{}", '│');
+        print!("{}", '\u{2502}'); // │
     } else if b == '/' as u8 {
-        print!("{}", '╱');
+        print!("{}", '\u{2571}'); // ╱
     } else if b == '\\' as u8 {
-        print!("{}", '╲');
+        print!("{}", '\u{2572}'); // ╲
     } else if b == '*' as u8 {
-        print!("{}", '✱');
+        print!("{}", '\u{25cf}'); // ●
     } else {
         print!("{}", b as char);
     }
