@@ -17,15 +17,27 @@ fn print_conv(graph_end: &mut bool, ch: char) {
         return;
     }
 
-    let conv;
+    // make target characters as bold
     match ch {
-        '|'  => conv = '\u{007c}', // | 
-        '/'  => conv = '\u{2571}', // ╱
-        '\\' => conv = '\u{2572}', // ╲
-        '*'  => conv = '\u{25cf}', // ●
-        _    => conv = ch
+        '|'  => { 
+            print!("\x1b[1m{}\x1b[0m", '|');
+        },
+        '/'  => { 
+            print!("\x1b[1m{}\x1b[0m", '/');
+        },
+        '\\' => {
+            print!("\x1b[1m{}\x1b[0m", '\\');
+        },
+        '_' => {
+            print!("\x1b[1m{}\x1b[0m", '_');
+        },
+        '*'  => {
+            print!("\x1b[1m{}\x1b[0m", '\u{25cf}'); // ●
+        },
+        _    => {
+            print!("{}", ch);
+        }
     }
-    print!("{}", conv);
 }
 
 fn main() {
