@@ -32,7 +32,7 @@ fn print_conv(graph_end: &mut bool, ch: char) {
             print!("\x1b[1m{}\x1b[0m", '_');
         },
         '*'  => {
-            print!("\x1b[1m{}\x1b[0m", '\u{25cf}'); // ●
+            print!("\x1b[1m{}\x1b[0m", '\u{2b2e}'); // ⬮
         },
         _    => {
             print!("{}", ch);
