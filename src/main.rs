@@ -1,7 +1,5 @@
 use std::io::{self, BufRead};
 
-const STRIP_COLOR: bool = false;
-
 enum State {
     Normal,
     Escape,
@@ -17,27 +15,15 @@ fn print_conv(graph_end: &mut bool, ch: char) {
         return;
     }
 
-    // make target characters as bold
+    let conv;
     match ch {
-        '|'  => { 
-            print!("\x1b[1m{}\x1b[0m", '|');
-        },
-        '/'  => { 
-            print!("\x1b[1m{}\x1b[0m", '/');
-        },
-        '\\' => {
-            print!("\x1b[1m{}\x1b[0m", '\\');
-        },
-        '_' => {
-            print!("\x1b[1m{}\x1b[0m", '_');
-        },
-        '*'  => {
-            print!("\x1b[1m{}\x1b[0m", '\u{2b2e}'); // ⬮
-        },
-        _    => {
-            print!("{}", ch);
-        }
+        '|'  => conv = '\u{007c}', // | 
+        '/'  => conv = '\u{2571}', // ╱
+        '\\' => conv = '\u{2572}', // ╲
+        '*'  => conv = '\u{2b2e}', // ⬮
+        _    => conv = ch
     }
+    print!("{}", conv);
 }
 
 fn main() {
@@ -51,21 +37,21 @@ fn main() {
         let mut state = State::Normal;
         let mut graph_end = false;
         for c in line_data.chars() {
+            if graph_end {
+                print!("{}", c);
+                continue;
+            }
             match &state {
                 State::Normal => {
                     if c == 0x1B as char { // ESC
                         state = State::Escape;
-                        if !STRIP_COLOR {
-                            print!("{}", c);
-                        }
+                        print!("{}", c);
                     } else {
                         print_conv(&mut graph_end, c);
                     }
                 },
                 State::Escape => {
-                    if !STRIP_COLOR {
-                        print!("{}", c);
-                    }
+                    print!("{}", c);
                     if c == 0x5B as char { // [
                         state = State::Csi;
                     } else {
@@ -73,9 +59,7 @@ fn main() {
                     }
                 },
                 State::Csi => {
-                    if !STRIP_COLOR {
-                        print!("{}", c);
-                    }
+                    print!("{}", c);
                     if c >= 0x40 as char && c < 0x80 as char {
                         state = State::Normal;
                     }
