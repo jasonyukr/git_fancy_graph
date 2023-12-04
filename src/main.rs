@@ -1,4 +1,4 @@
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, BufWriter, Write};
 
 enum State {
     Normal,
@@ -27,6 +27,8 @@ fn print_conv(graph_end: &mut bool, v: &mut Vec::<char>, ch: char) {
 }
 
 fn main() {
+    let stdout = io::stdout();
+    let mut out = BufWriter::new(stdout);
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         let line_data;
@@ -68,7 +70,8 @@ fn main() {
             }
         }
         let s: String = v.into_iter().collect();
-        println!("{}", s);
+        writeln!(out, "{}", s).unwrap();
     }
+    out.flush().unwrap();
 }
 
