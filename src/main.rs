@@ -17,9 +17,9 @@ fn print_conv(graph_end: &mut bool, v: &mut Vec::<char>, ch: char) {
 
     let conv;
     match ch {
-        '|'  => conv = '\u{007c}', // | 
-        '/'  => conv = '\u{2571}', // ╱
-        '\\' => conv = '\u{2572}', // ╲
+//        '|'  => conv = '\u{007c}', // | 
+//        '/'  => conv = '\u{2571}', // ╱
+//        '\\' => conv = '\u{2572}', // ╲
         '*'  => conv = '\u{2b2e}', // ⬮
         _    => conv = ch
     }
