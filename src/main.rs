@@ -6,12 +6,12 @@ enum State {
     Csi,
 }
 
-fn print_conv(graph_end: &mut bool, ch: char) {
+fn print_conv(graph_end: &mut bool, v: &mut Vec::<char>, ch: char) {
     if *graph_end == false {
         *graph_end = ch.is_digit(16)
     }
     if *graph_end == true {
-        print!("{}", ch);
+        v.push(ch);
         return;
     }
 
@@ -23,7 +23,7 @@ fn print_conv(graph_end: &mut bool, ch: char) {
         '*'  => conv = '\u{2b2e}', // ⬮
         _    => conv = ch
     }
-    print!("{}", conv);
+    v.push(conv);
 }
 
 fn main() {
@@ -36,22 +36,23 @@ fn main() {
         }
         let mut state = State::Normal;
         let mut graph_end = false;
+        let mut v = Vec::<char>::with_capacity(2048);
         for c in line_data.chars() {
             if graph_end {
-                print!("{}", c);
+                v.push(c);
                 continue;
             }
             match &state {
                 State::Normal => {
                     if c == 0x1B as char { // ESC
                         state = State::Escape;
-                        print!("{}", c);
+                        v.push(c);
                     } else {
-                        print_conv(&mut graph_end, c);
+                        print_conv(&mut graph_end, &mut v, c);
                     }
                 },
                 State::Escape => {
-                    print!("{}", c);
+                    v.push(c);
                     if c == 0x5B as char { // [
                         state = State::Csi;
                     } else {
@@ -59,14 +60,15 @@ fn main() {
                     }
                 },
                 State::Csi => {
-                    print!("{}", c);
+                    v.push(c);
                     if c >= 0x40 as char && c < 0x80 as char {
                         state = State::Normal;
                     }
                 },
             }
         }
-        println!();
+        let s: String = v.into_iter().collect();
+        println!("{}", s);
     }
 }
 
