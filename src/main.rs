@@ -1,4 +1,5 @@
 use std::io::{self, BufRead, BufWriter, Write};
+use std::process;
 
 enum State {
     Normal,
@@ -70,7 +71,9 @@ fn main() {
             }
         }
         let s: String = v.into_iter().collect();
-        writeln!(out, "{}", s).unwrap();
+        if let Err(_) = writeln!(out, "{}", s) {
+            process::exit(1);
+        }
     }
     out.flush().unwrap();
 }
